@@ -9,6 +9,7 @@
 
 @interface NSFileHandle (ZKAdditions)
 
-+ (NSFileHandle *) zk_newFileHandleForWritingAtPath:(NSString *)path;
++ (NSFileHandle *) zk_newFileHandleForWritingAtPath:(NSString *)path password:(NSString *)password;
++ (NSFileHandle *) zk_newFileHandleForReadingAtPath:(NSString *)path password:(NSString *)password;
 
 @end

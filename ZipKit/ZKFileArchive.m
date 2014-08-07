@@ -244,7 +244,8 @@
 	return result;
 }
 
-- (NSInteger) inflateFile:(ZKCDHeader *)cdHeader toDirectory:(NSString *)expansionDirectory {
+- (NSInteger) inflateFile:(ZKCDHeader *)cdHeader toDirectory:(NSString *)expansionDirectory
+{
 	if (self.delegate) {
 		if ([NSThread isMainThread])
 			[self willUnzipPath:cdHeader.filename];
@@ -287,7 +288,7 @@
 				strm.total_out = 0;
 				ret = inflateInit2(&strm, -MAX_WBITS);
 				if (ret == Z_OK) {
-					NSFileHandle *inflatedFile = [NSFileHandle zk_newFileHandleForWritingAtPath:path];
+					NSFileHandle *inflatedFile = [NSFileHandle zk_newFileHandleForWritingAtPath:path password:self.password];
 					unsigned char out[ZKZipBlockSize];
 					@autoreleasepool {
 						do {
@@ -355,7 +356,7 @@
 				}
 			} else if (cdHeader.compressionMethod == Z_NO_COMPRESSION) {
 				if (totalBytesRead <= cdHeader.compressedSize) {
-					NSFileHandle *inflatedFile = [NSFileHandle zk_newFileHandleForWritingAtPath:path];
+					NSFileHandle *inflatedFile = [NSFileHandle zk_newFileHandleForWritingAtPath:path password:self.password];
 					
 					@autoreleasepool {
 						do {
@@ -455,7 +456,7 @@
 		BOOL isDir = [self.fileManager zk_isDirAtPath:path];
 		BOOL isSymlink = [self.fileManager zk_isSymLinkAtPath:path];
 		
-		NSFileHandle *archiveFile = [NSFileHandle zk_newFileHandleForWritingAtPath:self.archivePath];
+		NSFileHandle *archiveFile = [NSFileHandle zk_newFileHandleForWritingAtPath:self.archivePath password:nil];
 		
 		// append a trailing slash to directory paths
 		if (isDir && !isSymlink && ![[path substringFromIndex:([path length] - 1)] isEqualToString:@"/"])
@@ -527,7 +528,7 @@
 			strm.total_out = 0;
 			NSInteger ret = deflateInit2(&strm, Z_BEST_COMPRESSION, Z_DEFLATED, -MAX_WBITS, 8, Z_DEFAULT_STRATEGY);
 			if (ret == Z_OK) {
-				NSFileHandle *file = [NSFileHandle fileHandleForReadingAtPath:path];
+				NSFileHandle *file = [NSFileHandle zk_newFileHandleForReadingAtPath:path password:self.password];
 				NSData *fileData = nil;
 				NSData *archiveData = nil;
 				unsigned char out[ZKZipBlockSize];

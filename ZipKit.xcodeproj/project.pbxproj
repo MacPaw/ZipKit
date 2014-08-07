@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B80933DB1993A707000AEEA3 /* RNCryptor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B80933D41993A6F0000AEEA3 /* RNCryptor.framework */; };
+		B80933DF1993ACA9000AEEA3 /* ZKCryptoFileHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = B80933DD1993ACA9000AEEA3 /* ZKCryptoFileHandler.h */; };
+		B80933E01993ACA9000AEEA3 /* ZKCryptoFileHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = B80933DE1993ACA9000AEEA3 /* ZKCryptoFileHandler.m */; };
 		CB6F0A1017483A9A00F91524 /* GMAppleDouble+ZKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = CB6F09ED17483A9A00F91524 /* GMAppleDouble+ZKAdditions.h */; };
 		CB6F0A1117483A9A00F91524 /* NSData+ZKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = CB6F09EE17483A9A00F91524 /* NSData+ZKAdditions.h */; };
 		CB6F0A1217483A9A00F91524 /* NSDate+ZKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = CB6F09EF17483A9A00F91524 /* NSDate+ZKAdditions.h */; };
@@ -87,6 +90,44 @@
 		CB6F0AD817484C5300F91524 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB6F0AD717484C5300F91524 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B80933D11993A6F0000AEEA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B80933CA1993A6F0000AEEA3 /* RNCryptor.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FB7564F01512D3C4007B806B;
+			remoteInfo = RNCryptor;
+		};
+		B80933D31993A6F0000AEEA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B80933CA1993A6F0000AEEA3 /* RNCryptor.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AB13427A15E0FC2300456914;
+			remoteInfo = "RNCryptor OS X";
+		};
+		B80933D51993A6F0000AEEA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B80933CA1993A6F0000AEEA3 /* RNCryptor.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FB7565001512D3C4007B806B;
+			remoteInfo = RNCryptorTests;
+		};
+		B80933D71993A6F0000AEEA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B80933CA1993A6F0000AEEA3 /* RNCryptor.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FB6AC68C16F6704100CA0C0A;
+			remoteInfo = rncrypt;
+		};
+		B80933D91993A6FE000AEEA3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B80933CA1993A6F0000AEEA3 /* RNCryptor.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AB13427915E0FC2300456914;
+			remoteInfo = "RNCryptor OS X";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		CB6F0A9617484BDE00F91524 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -100,6 +141,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B80933CA1993A6F0000AEEA3 /* RNCryptor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCryptor.xcodeproj; path = RNCryptor/RNCryptor.xcodeproj; sourceTree = "<group>"; };
+		B80933DD1993ACA9000AEEA3 /* ZKCryptoFileHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZKCryptoFileHandler.h; path = Crypto/ZKCryptoFileHandler.h; sourceTree = "<group>"; };
+		B80933DE1993ACA9000AEEA3 /* ZKCryptoFileHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZKCryptoFileHandler.m; path = Crypto/ZKCryptoFileHandler.m; sourceTree = "<group>"; };
 		CB6F09CE174838FC00F91524 /* ZipKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZipKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB6F09D6174838FC00F91524 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CB6F09D9174838FC00F91524 /* ZipKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ZipKit-Info.plist"; sourceTree = "<group>"; };
@@ -156,6 +200,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B80933DB1993A707000AEEA3 /* RNCryptor.framework in Frameworks */,
 				CB6F0A6817483F7200F91524 /* Foundation.framework in Frameworks */,
 				CB6F0A921748463D00F91524 /* CoreServices.framework in Frameworks */,
 				CB6F0A931748464400F91524 /* libz.dylib in Frameworks */,
@@ -183,6 +228,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B80933C91993A6E1000AEEA3 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				B80933CA1993A6F0000AEEA3 /* RNCryptor.xcodeproj */,
+			);
+			name = External;
+			sourceTree = "<group>";
+		};
+		B80933CB1993A6F0000AEEA3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B80933D21993A6F0000AEEA3 /* libRNCryptor.a */,
+				B80933D41993A6F0000AEEA3 /* RNCryptor.framework */,
+				B80933D61993A6F0000AEEA3 /* RNCryptorTests.xctest */,
+				B80933D81993A6F0000AEEA3 /* rncrypt */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B80933DC1993AC88000AEEA3 /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				B80933DD1993ACA9000AEEA3 /* ZKCryptoFileHandler.h */,
+				B80933DE1993ACA9000AEEA3 /* ZKCryptoFileHandler.m */,
+			);
+			name = Crypto;
+			sourceTree = "<group>";
+		};
 		CB6F09C4174838FC00F91524 = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +281,7 @@
 		CB6F09D0174838FC00F91524 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B80933C91993A6E1000AEEA3 /* External */,
 				CBF776171748888A00E6979E /* iOS */,
 				CB6F09EC174839FD00F91524 /* OS X */,
 			);
@@ -217,6 +291,7 @@
 		CB6F09D7174838FC00F91524 /* ZipKit */ = {
 			isa = PBXGroup;
 			children = (
+				B80933DC1993AC88000AEEA3 /* Crypto */,
 				CB6F09FA17483A9A00F91524 /* ZKDefs.h */,
 				CB6F0A0C17483A9A00F91524 /* ZKDefs.m */,
 				CB6F0A4117483CCD00F91524 /* MacFUSE */,
@@ -347,6 +422,7 @@
 				CB6F0A1A17483A9A00F91524 /* ZKCDTrailer64.h in Headers */,
 				CB6F0A1B17483A9A00F91524 /* ZKCDTrailer64Locator.h in Headers */,
 				CB6F0A1C17483A9A00F91524 /* ZKDataArchive.h in Headers */,
+				B80933DF1993ACA9000AEEA3 /* ZKCryptoFileHandler.h in Headers */,
 				CB6F0A1D17483A9A00F91524 /* ZKDefs.h in Headers */,
 				CB6F0A1E17483A9A00F91524 /* ZKFileArchive.h in Headers */,
 				CB6F0A1F17483A9A00F91524 /* ZKLFHeader.h in Headers */,
@@ -377,6 +453,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				B80933DA1993A6FE000AEEA3 /* PBXTargetDependency */,
 			);
 			name = ZipKit;
 			productName = ZipKit;
@@ -436,6 +513,12 @@
 			mainGroup = CB6F09C4174838FC00F91524;
 			productRefGroup = CB6F09CF174838FC00F91524 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = B80933CB1993A6F0000AEEA3 /* Products */;
+					ProjectRef = B80933CA1993A6F0000AEEA3 /* RNCryptor.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				CB6F09CD174838FC00F91524 /* ZipKit */,
@@ -444,6 +527,37 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		B80933D21993A6F0000AEEA3 /* libRNCryptor.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNCryptor.a;
+			remoteRef = B80933D11993A6F0000AEEA3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B80933D41993A6F0000AEEA3 /* RNCryptor.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RNCryptor.framework;
+			remoteRef = B80933D31993A6F0000AEEA3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B80933D61993A6F0000AEEA3 /* RNCryptorTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RNCryptorTests.xctest;
+			remoteRef = B80933D51993A6F0000AEEA3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B80933D81993A6F0000AEEA3 /* rncrypt */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = rncrypt;
+			remoteRef = B80933D71993A6F0000AEEA3 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		CB6F09CC174838FC00F91524 /* Resources */ = {
@@ -470,6 +584,7 @@
 				CB6F0A2817483A9A00F91524 /* NSString+ZKAdditions.m in Sources */,
 				CB6F0A2917483A9A00F91524 /* ZKArchive.m in Sources */,
 				CB6F0A2A17483A9A00F91524 /* ZKCDHeader.m in Sources */,
+				B80933E01993ACA9000AEEA3 /* ZKCryptoFileHandler.m in Sources */,
 				CB6F0A2B17483A9A00F91524 /* ZKCDTrailer.m in Sources */,
 				CB6F0A2C17483A9A00F91524 /* ZKCDTrailer64.m in Sources */,
 				CB6F0A2D17483A9A00F91524 /* ZKCDTrailer64Locator.m in Sources */,
@@ -531,6 +646,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B80933DA1993A6FE000AEEA3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "RNCryptor OS X";
+			targetProxy = B80933D91993A6FE000AEEA3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		CB6F09E1174838FC00F91524 /* Debug */ = {
