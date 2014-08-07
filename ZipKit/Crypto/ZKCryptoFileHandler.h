@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ZKEncryptorStream : NSInputStream
+@interface ZKCryptoFileHandler : NSFileHandle
+
++ (id)fileHandleForReadingAtPath:(NSString *)path password:(NSString *)password;
++ (id)fileHandleForWritingAtPath:(NSString *)path password:(NSString *)password;
 
 @end
