@@ -12,8 +12,8 @@
 
 @interface ZKFileArchive : ZKArchive 
 
-+ (ZKFileArchive *) process:(id)item usingResourceFork:(BOOL)flag withInvoker:(id)invoker andDelegate:(id)delegate;
-+ (ZKFileArchive *) archiveWithArchivePath:(NSString *)archivePath;
++ (ZKFileArchive *) process:(id)item usingResourceFork:(BOOL)flag withInvoker:(id)invoker andDelegate:(id)delegate password:(NSString *)password;
++ (ZKFileArchive *) archiveWithArchivePath:(NSString *)archivePath password:(NSString *)password;
 
 - (NSInteger) inflateToDiskUsingResourceFork:(BOOL)flag;
 - (NSInteger) inflateToDirectory:(NSString *)expansionDirectory usingResourceFork:(BOOL)rfFlag;

@@ -34,7 +34,8 @@
  delegate should be an object that responds to one or more of the messages in the above category to display progress (see the Application or Tool targets for examples)
  */
 
-+ (ZKFileArchive *) process:(id)item usingResourceFork:(BOOL)rfFlag withInvoker:(id)invoker andDelegate:(id)delegate {
++ (ZKFileArchive *) process:(id)item usingResourceFork:(BOOL)rfFlag withInvoker:(id)invoker andDelegate:(id)delegate password:(NSString *)password
+{
 	ZKFileArchive *archive = nil;
 	
 	if ([item isKindOfClass:[NSArray class]])
@@ -44,7 +45,7 @@
 	if ([item isKindOfClass:[NSString class]]) {
 		NSString *path = (NSString *)item;
 		if ([self validArchiveAtPath:path]) {
-			archive = [self archiveWithArchivePath:path];
+			archive = [self archiveWithArchivePath:path password:password];
 			if (!archive)
 				return nil;
 			archive.invoker = invoker;
@@ -95,7 +96,7 @@
 		} else {
 			NSString *archivePath = [self uniquify:[[path stringByDeletingPathExtension]
 			                                        stringByAppendingPathExtension:ZKArchiveFileExtension]];
-			archive = [self archiveWithArchivePath:archivePath];
+			archive = [self archiveWithArchivePath:archivePath password:password];
 			if (!archive)
 				return nil;
 			archive.invoker = invoker;
@@ -142,7 +143,7 @@
 		NSString *archiveName = [NSLocalizedString(@"Archive", @"default archive filename")
 		                         stringByAppendingPathExtension:ZKArchiveFileExtension];
 		NSString *archivePath = [self uniquify:[basePath stringByAppendingPathComponent:archiveName]];
-		archive = [self archiveWithArchivePath:archivePath];
+		archive = [self archiveWithArchivePath:archivePath password:password];
 		if (!archive)
 			return nil;
 		archive.invoker = invoker;
@@ -182,7 +183,7 @@
 	return archive;
 }
 
-+ (ZKFileArchive *) archiveWithArchivePath:(NSString *)path {
++ (ZKFileArchive *) archiveWithArchivePath:(NSString *)path password:(NSString *)password {
 	ZKFileArchive *archive = [ZKFileArchive new];
 	archive.archivePath = path;
 	if ([archive.fileManager fileExistsAtPath:archive.archivePath]) {
@@ -208,6 +209,9 @@
 		} else
 			archive = nil;
 	}
+    
+    archive.password = password;
+    
 	return archive;
 }
 
@@ -307,7 +311,7 @@
 										if (ret != Z_STREAM_ERROR) {
 											have = (chunkSize - strm.avail_out);
 											crc = crc32(crc, out, (unsigned int)have);
-											[inflatedFile writeData:[NSData dataWithBytesNoCopy:out length:(NSUInteger)have freeWhenDone:NO]];
+											[inflatedFile zk_writeData:[NSData dataWithBytesNoCopy:out length:(NSUInteger)have freeWhenDone:NO]];
 											bytesWritten += have;
 										} else
 											ZKLogError(@"Stream error: %@", path);
@@ -348,7 +352,7 @@
 					}
 					if (ret != Z_STREAM_ERROR)
 						inflateEnd(&strm);
-					[inflatedFile closeFile];
+					[inflatedFile zk_closeFile];
 					if (cdHeader.crc != crc) {
 						ret = Z_DATA_ERROR;
 						ZKLogError(@"Inflation CRC mismatch for %@ - stored: %u, calculated: %u", path, cdHeader.crc, crc);
@@ -366,7 +370,7 @@
 								bytesRead = [deflatedData length];
 								totalBytesRead += bytesRead;
 								
-								[inflatedFile writeData:deflatedData];
+								[inflatedFile zk_writeData:deflatedData];
 								bytesWritten += bytesRead;
 								crc = [deflatedData zk_crc32:crc];
 							}
@@ -397,7 +401,7 @@
 						} while (totalBytesRead < cdHeader.compressedSize);
 					}
 					
-					[inflatedFile closeFile];
+					[inflatedFile zk_closeFile];
 					if (cdHeader.crc != crc) {
 						ret = Z_DATA_ERROR;
 						ZKLogError(@"Inflation CRC mismatch for %@ - stored: %u, calculated: %u", path, cdHeader.crc, crc);
@@ -539,7 +543,7 @@
 				@autoreleasepool {
 					do {
 						@autoreleasepool {
-							fileData = [file readDataOfLength:(NSUInteger)ZKZipBlockSize];
+							fileData = [file zk_readDataOfLength:(NSUInteger)ZKZipBlockSize];
 							strm.avail_in = (unsigned int)[fileData length];
 							bytesWritten += strm.avail_in;
 							flush = Z_FINISH;
