@@ -71,6 +71,20 @@
 	return expansionDirectory;
 }
 
+- (NSString *)uniqueExpansionFilePath:(NSString *)filePath
+{
+    NSString *basicString = [filePath stringByDeletingPathExtension];
+    NSString *extention = [filePath pathExtension];
+    
+	NSUInteger i = 1;
+	while ([self.fileManager fileExistsAtPath:filePath])
+    {
+		filePath = [basicString stringByAppendingFormat:@" %lu.%@", (unsigned long)i++, extention];
+    }
+    
+	return filePath;
+}
+
 - (void) cleanUpExpansionDirectory:(NSString *)expansionDirectory {
 	NSString *enclosingFolder = [expansionDirectory stringByDeletingLastPathComponent];
 	NSArray *dirContents = [self.fileManager contentsOfDirectoryAtPath:expansionDirectory error:nil];

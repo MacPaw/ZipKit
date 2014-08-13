@@ -49,6 +49,7 @@
 + (NSString *) uniquify:(NSString *) path;
 - (void) calculateSizeAndItemCount:(NSDictionary *) userInfo;
 - (NSString *) uniqueExpansionDirectoryIn:(NSString *) enclosingFolder;
+- (NSString *)uniqueExpansionFilePath:(NSString *)filePath;
 - (void) cleanUpExpansionDirectory:(NSString *) expansionDirectory;
 
 - (BOOL) delegateWantsSizes;

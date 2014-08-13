@@ -19,6 +19,8 @@
 #import "NSString+ZKAdditions.h"
 #import "ZKDefs.h"
 #import "zlib.h"
+#import "ZKCryptoInflator.h"
+#import <RNCryptor/RNEncryptor.h>
 
 #if ZK_TARGET_OS_MAC
 #import "GMAppleDouble+ZKAdditions.h"
@@ -220,8 +222,8 @@
 
 - (NSInteger) inflateToDiskUsingResourceFork:(BOOL)rfFlag {
 	NSString *enclosingFolder = [self.archivePath stringByDeletingLastPathComponent];
-	NSString *expansionDirectory = [self uniqueExpansionDirectoryIn:enclosingFolder];
-	return [self inflateToDirectory:expansionDirectory usingResourceFork:rfFlag];
+	//NSString *expansionDirectory = [self uniqueExpansionDirectoryIn:enclosingFolder];
+	return [self inflateToDirectory:enclosingFolder usingResourceFork:rfFlag];
 }
 - (NSInteger) inflateToDirectory:(NSString *)expansionDirectory usingResourceFork:(BOOL)rfFlag {
 	NSInteger result = zkSucceeded;
@@ -240,10 +242,10 @@
 	}
 	
 #if ZK_TARGET_OS_MAC
-	if (result == zkSucceeded && rfFlag)
-		[self.fileManager zk_combineAppleDoubleInDirectory:expansionDirectory];
+//	if (result == zkSucceeded && rfFlag)
+//		[self.fileManager zk_combineAppleDoubleInDirectory:expansionDirectory];
 #endif
-	[self cleanUpExpansionDirectory:expansionDirectory];
+//	[self cleanUpExpansionDirectory:expansionDirectory];
 	
 	return result;
 }
@@ -261,7 +263,7 @@
 	BOOL result = NO;
 	@autoreleasepool {
 		ZKLFHeader *lfHeader = [ZKLFHeader recordWithArchivePath:self.archivePath atOffset:cdHeader.localHeaderOffset];
-		NSString *path = [expansionDirectory stringByAppendingPathComponent:cdHeader.filename];
+		NSString *path = [self uniqueExpansionFilePath:[expansionDirectory stringByAppendingPathComponent:cdHeader.filename]];
 		
 		NSFileHandle *archiveFile = [NSFileHandle fileHandleForReadingAtPath:self.archivePath];
 		[archiveFile seekToFileOffset:(cdHeader.localHeaderOffset + [lfHeader length])];
@@ -281,6 +283,15 @@
 			unsigned long long have, chunkSize, bytesRead, totalBytesRead = 0, block = 0, bytesWritten = 0;
 			unsigned long crc = 0;
 			int ret = Z_OK;
+            
+            BOOL fork = [cdHeader.filename hasPrefix:ZKMacOSXDirectory];
+            NSString *realFilePath = path;
+            if (fork)
+            {
+                realFilePath = [expansionDirectory stringByAppendingPathComponent:
+                                [cdHeader.filename substringFromIndex:ZKMacOSXDirectory.length]];
+            }
+            
 			if (cdHeader.compressionMethod == Z_DEFLATED) {
 				// inflate the the deflated data from the archive to the file
 				z_stream strm;
@@ -292,7 +303,7 @@
 				strm.total_out = 0;
 				ret = inflateInit2(&strm, -MAX_WBITS);
 				if (ret == Z_OK) {
-					NSFileHandle *inflatedFile = [NSFileHandle zk_newFileHandleForWritingAtPath:path password:self.password];
+					ZKCryptoInflator *inflatedFile = [[ZKCryptoInflator alloc] initWithPath:realFilePath password:self.password isFork:fork];
 					unsigned char out[ZKZipBlockSize];
 					@autoreleasepool {
 						do {
@@ -311,14 +322,14 @@
 										if (ret != Z_STREAM_ERROR) {
 											have = (chunkSize - strm.avail_out);
 											crc = crc32(crc, out, (unsigned int)have);
-											[inflatedFile zk_writeData:[NSData dataWithBytesNoCopy:out length:(NSUInteger)have freeWhenDone:NO]];
+											[inflatedFile writeData:[NSData dataWithBytesNoCopy:out length:(NSUInteger)have freeWhenDone:NO]];
 											bytesWritten += have;
 										} else
 											ZKLogError(@"Stream error: %@", path);
 										if (irtsIsCancelled) {
 											if ([self.invoker isCancelled]) {
 												@autoreleasepool {
-													[inflatedFile closeFile];
+													[inflatedFile finalize];
 													if (self.delegate)
 														[self performSelectorOnMainThread:@selector(didCancel) withObject:nil waitUntilDone:NO];
 													[archiveFile closeFile];
@@ -352,7 +363,7 @@
 					}
 					if (ret != Z_STREAM_ERROR)
 						inflateEnd(&strm);
-					[inflatedFile zk_closeFile];
+					[inflatedFile finalize];
 					if (cdHeader.crc != crc) {
 						ret = Z_DATA_ERROR;
 						ZKLogError(@"Inflation CRC mismatch for %@ - stored: %u, calculated: %u", path, cdHeader.crc, crc);
@@ -651,6 +662,10 @@
 			// optionally include the file's deflated AppleDoubled Finder info and resource fork in the archive
 			NSData *appleDoubleData = [GMAppleDouble zk_appleDoubleDataForPath:path];
 			if (appleDoubleData) {
+                
+                appleDoubleData = [RNEncryptor encryptData:appleDoubleData
+                                              withSettings:kRNCryptorAES256Settings password:self.password error:nil];
+                
 				NSData *deflatedData = [appleDoubleData zk_deflate];
 				
 				ZKLFHeader *lfHeaderResource = [ZKLFHeader new];

@@ -135,18 +135,23 @@ static void *NSFileHandleReadingSemaphoreKey;
 
 - (void)zk_writeData:(NSData *)data
 {
-    self.readingSemaphore = dispatch_semaphore_create(0);
-    [self.cryptor addData:data];
-    dispatch_semaphore_wait(self.readingSemaphore, DISPATCH_TIME_FOREVER);
+    if (data != nil && data.length > 0 && !self.cryptor.isFinished)
+    {
+        self.readingSemaphore = dispatch_semaphore_create(0);
+        [self.cryptor addData:data];
+        dispatch_semaphore_wait(self.readingSemaphore, DISPATCH_TIME_FOREVER);
+    }
 }
 
 - (void)zk_closeFile
 {
-    self.readingSemaphore = dispatch_semaphore_create(0);
-    [self.cryptor finish];
-    dispatch_semaphore_wait(self.readingSemaphore, DISPATCH_TIME_FOREVER);
-    
-    [self closeFile];
+    if (!self.cryptor.isFinished)
+    {
+        self.readingSemaphore = dispatch_semaphore_create(0);
+        [self.cryptor finish];
+        dispatch_semaphore_wait(self.readingSemaphore, DISPATCH_TIME_FOREVER);
+        [self closeFile];
+    }
 }
 
 @end

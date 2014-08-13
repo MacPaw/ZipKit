@@ -221,8 +221,7 @@
 			if (appleDoubleData) {
 				NSString *appleDoublePath = [[ZKMacOSXDirectory stringByAppendingPathComponent:
 				                              [relativePath stringByDeletingLastPathComponent]]
-				                             stringByAppendingPathComponent:
-				                             [ZKDotUnderscore stringByAppendingString:[relativePath lastPathComponent]]];
+				                             stringByAppendingPathComponent:[relativePath lastPathComponent]];
 				rc = [self deflateData:appleDoubleData withFilename:appleDoublePath andAttributes:fileAttributes];
 			}
 		}
