@@ -38,8 +38,13 @@
 
 + (ZKFileArchive *) process:(id)item usingResourceFork:(BOOL)rfFlag withInvoker:(id)invoker andDelegate:(id)delegate password:(NSString *)password
 {
+    return [self process:item usingResourceFork:rfFlag withInvoker:invoker andDelegate:delegate password:password expandPath:nil];
+}
+
++ (ZKFileArchive *) process:(id)item usingResourceFork:(BOOL)rfFlag withInvoker:(id)invoker andDelegate:(id)delegate password:(NSString *)password expandPath:(NSString *)expandPath
+{
 	ZKFileArchive *archive = nil;
-	
+    
 	if ([item isKindOfClass:[NSArray class]])
 		if ([item count] == 1)
 			item = item[0];
@@ -47,7 +52,7 @@
 	if ([item isKindOfClass:[NSString class]]) {
 		NSString *path = (NSString *)item;
 		if ([self validArchiveAtPath:path]) {
-			archive = [self archiveWithArchivePath:path password:password];
+			archive = [self archiveWithArchivePath:path password:password expandPath:expandPath];
 			if (!archive)
 				return nil;
 			archive.invoker = invoker;
@@ -98,7 +103,7 @@
 		} else {
 			NSString *archivePath = [self uniquify:[[path stringByDeletingPathExtension]
 			                                        stringByAppendingPathExtension:ZKArchiveFileExtension]];
-			archive = [self archiveWithArchivePath:archivePath password:password];
+			archive = [self archiveWithArchivePath:archivePath password:password expandPath:expandPath];
 			if (!archive)
 				return nil;
 			archive.invoker = invoker;
@@ -145,7 +150,7 @@
 		NSString *archiveName = [NSLocalizedString(@"Archive", @"default archive filename")
 		                         stringByAppendingPathExtension:ZKArchiveFileExtension];
 		NSString *archivePath = [self uniquify:[basePath stringByAppendingPathComponent:archiveName]];
-		archive = [self archiveWithArchivePath:archivePath password:password];
+		archive = [self archiveWithArchivePath:archivePath password:password expandPath:expandPath];
 		if (!archive)
 			return nil;
 		archive.invoker = invoker;
@@ -185,7 +190,7 @@
 	return archive;
 }
 
-+ (ZKFileArchive *) archiveWithArchivePath:(NSString *)path password:(NSString *)password {
++ (ZKFileArchive *) archiveWithArchivePath:(NSString *)path password:(NSString *)password expandPath:(NSString *)expandPath {
 	ZKFileArchive *archive = [ZKFileArchive new];
 	archive.archivePath = path;
 	if ([archive.fileManager fileExistsAtPath:archive.archivePath]) {
@@ -213,6 +218,7 @@
 	}
     
     archive.password = password;
+    archive.expandPath = expandPath;
     
 	return archive;
 }
@@ -263,6 +269,12 @@
 	BOOL result = NO;
 	@autoreleasepool {
 		ZKLFHeader *lfHeader = [ZKLFHeader recordWithArchivePath:self.archivePath atOffset:cdHeader.localHeaderOffset];
+        
+        if (self.expandPath != nil)
+        {
+            expansionDirectory = self.expandPath;
+        }
+        
 		NSString *path = [self uniqueExpansionFilePath:[expansionDirectory stringByAppendingPathComponent:cdHeader.filename]];
 		
 		NSFileHandle *archiveFile = [NSFileHandle fileHandleForReadingAtPath:self.archivePath];

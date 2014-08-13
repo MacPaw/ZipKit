@@ -13,7 +13,9 @@
 @interface ZKFileArchive : ZKArchive 
 
 + (ZKFileArchive *) process:(id)item usingResourceFork:(BOOL)flag withInvoker:(id)invoker andDelegate:(id)delegate password:(NSString *)password;
-+ (ZKFileArchive *) archiveWithArchivePath:(NSString *)archivePath password:(NSString *)password;
++ (ZKFileArchive *) process:(id)item usingResourceFork:(BOOL)rfFlag withInvoker:(id)invoker andDelegate:(id)delegate password:(NSString *)password
+                 expandPath:(NSString *)expandPath;
++ (ZKFileArchive *) archiveWithArchivePath:(NSString *)archivePath password:(NSString *)password expandPath:(NSString *)expandPath;
 
 - (NSInteger) inflateToDiskUsingResourceFork:(BOOL)flag;
 - (NSInteger) inflateToDirectory:(NSString *)expansionDirectory usingResourceFork:(BOOL)rfFlag;
@@ -25,5 +27,6 @@
 
 @property (assign) BOOL useZip64Extensions;
 @property (strong) NSString *password;
+@property (strong) NSString *expandPath;
 
 @end
